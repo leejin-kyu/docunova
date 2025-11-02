@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  # Ollama 서비스
+  ollama:
+    image: ollama/ollama:latest
+    container_name: docunova-ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - docunova-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 백엔드 API
+  backend:
+    build:
+      context: ../backend
+      dockerfile: ../deployment/Dockerfile.backend
+    container_name: docunova-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+      - QDRANT_PATH=/app/qdrant_storage
+      - DATA_PATH=/app/data
+      - CHAT_HISTORY_PATH=/app/chat_history
+      - LOG_LEVEL=INFO
+    volumes:
+      - backend_data:/app/data
+      - backend_qdrant:/app/qdrant_storage
+      - backend_history:/app/chat_history
+    depends_on:
+      ollama:
+        condition: service_healthy
+    networks:
+      - docunova-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 프론트엔드
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: ../deployment/Dockerfile.frontend
+    container_name: docunova-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NEXT_PUBLIC_WS_URL=ws://localhost:8000
+      - NODE_ENV=production
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - docunova-network
+
+  # Nginx 리버스 프록시
+  nginx:
+    image: nginx:alpine
+    container_name: docunova-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - docunova-network
+
+volumes:
+  ollama_data:
+    name: docunova_ollama_data
+  backend_data:
+    name: docunova_backend_data
+  backend_qdrant:
+    name: docunova_backend_qdrant
+  backend_history:
+    name: docunova_backend_history
+
+networks:
+  docunova-network:
+    name: docunova-network
+    driver: bridge

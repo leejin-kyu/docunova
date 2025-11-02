@@ -1,0 +1,129 @@
+  ---
+  🚀 사용 방법
+
+  1️⃣ 가장 간단한 방법 (권장)
+
+  1. 폴더 열기: C:\Users\leeji\Desktop\006 Web_page\DocuNova_FINAL\
+  2. START_DOCUNOVA.ps1 더블클릭
+  3. 브라우저에서 http://localhost:3001 접속
+
+  2️⃣ PowerShell 사용
+
+  cd "C:\Users\leeji\Desktop\006 Web_page\DocuNova_FINAL"
+  powershell -ExecutionPolicy Bypass -File START_DOCUNOVA.ps1
+
+  3️⃣ 종료
+
+  # 더블클릭
+  STOP_DOCUNOVA.ps1
+
+  # 또는 PowerShell
+  powershell -ExecutionPolicy Bypass -File STOP_DOCUNOVA.ps1
+
+  ---
+  📊 정리된 내용
+
+  ✅ 복사된 파일
+
+  1. 백엔드: private_rag_docunova/backend/ → DocuNova_FINAL/backend/
+  2. 가상환경: private_rag_docunova/venv/ → DocuNova_FINAL/venv/
+  3. 프론트엔드: private_rag_docunova_backup_ver2/frontend-modern/ → DocuNova_FINAL/frontend/
+  4. 문서: DocuNova_Architecture/ → DocuNova_FINAL/docs/
+  5. 리포트: 모든 .md 파일
+
+  ✅ 생성된 파일
+
+  1. START_DOCUNOVA.ps1 - 원클릭 시작 스크립트
+    - Ollama 확인
+    - 백엔드 시작
+    - 프론트엔드 시작
+    - 헬스체크
+  2. STOP_DOCUNOVA.ps1 - 원클릭 종료 스크립트
+    - 백엔드 종료 (Port 8000)
+    - 프론트엔드 종료 (Port 3000/3001)
+  3. README.md - 완전한 사용 설명서
+    - 빠른 시작 가이드
+    - API 문서
+    - 문제 해결
+    - 프로젝트 구조
+
+  ---
+  💡 주요 특징
+
+  1. 원클릭 실행
+
+  - START_DOCUNOVA.ps1 더블클릭만으로 전체 시스템 시작
+  - Ollama 확인, 백엔드/프론트엔드 자동 시작
+  - 15초 초기화 대기 후 헬스체크
+
+  2. 깔끔한 구조
+
+  - 핵심 파일만 포함
+  - node_modules, .next, pycache 제외
+  - 명확한 폴더 구분
+
+  3. 완전한 문서
+
+  - README.md: 전체 사용 가이드
+  - API 리포트: 6개 API 엔드포인트 문서
+  - 테스트 리포트: 25/25 테스트 결과
+  - 아키텍처 문서: 11개 설계 문서
+
+  4. 즉시 사용 가능
+
+  - npm install 완료됨
+  - Python venv 포함됨
+  - 모든 의존성 준비 완료
+
+  ---
+  🎯 다음 단계
+
+  즉시 실행
+
+  # 1. 폴더로 이동
+  cd "C:\Users\leeji\Desktop\006 Web_page\DocuNova_FINAL"
+
+  # 2. 시작
+  START_DOCUNOVA.ps1 더블클릭
+
+  # 3. 브라우저 열기
+  http://localhost:3001
+
+  테스트 실행 (선택 사항)
+
+  cd frontend
+  npx playwright test
+
+  ---
+  📦 원본 폴더 정리
+
+  이제 다음 폴더들은 삭제하셔도 됩니다 (백업하셨다면):
+
+  C:\Users\leeji\Desktop\006 Web_page\DocuNova\
+  ├── docunova-modern/               ❌ 삭제 가능
+  ├── docunova-saas/                 ❌ 삭제 가능
+  ├── private_rag_docunova/          ⚠️ 데이터 백업 후 삭제
+  ├── private_rag_docunova_backup/   ❌ 삭제 가능
+  ├── private_rag_docunova_backup_ver1.5/ ❌ 삭제 가능
+  └── private_rag_docunova_backup_ver2/   ❌ 삭제 가능
+
+  단, 다음은 유지하세요:
+  - ✅ DocuNova_FINAL/ (새 폴더)
+  - ✅ DocuNova_Architecture/ (참고용, 이미 복사됨)
+
+  ---
+  🎉 최종 확인
+
+  | 항목          | 상태  | 비고                 |
+  |-------------|-----|--------------------|
+  | 백엔드 복사      | ✅   | main.py 포함         |
+  | 가상환경 복사     | ✅   | venv/ 포함           |
+  | 프론트엔드 복사    | ✅   | 423개 패키지           |
+  | 문서 복사       | ✅   | 11개 문서 + 4개 리포트    |
+  | 시작 스크립트     | ✅   | START_DOCUNOVA.ps1 |
+  | 종료 스크립트     | ✅   | STOP_DOCUNOVA.ps1  |
+  | README      | ✅   | 완전한 사용 가이드         |
+  | npm install | ✅   | 의존성 준비 완료          |
+
+  ---
+  이제 C:\Users\leeji\Desktop\006 Web_page\DocuNova_FINAL\에서 START_DOCUNOVA.ps1을 더블클릭하시면 됩니다! 🚀
