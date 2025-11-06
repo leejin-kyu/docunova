@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocuNova - 상품 설명서</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 15mm;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', '맑은 고딕', AppleSDGothicNeo, sans-serif;
+            line-height: 1.8;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 0;
+            letter-spacing: -0.3px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        /* 표지 */
+        .cover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 40px;
+            text-align: center;
+        }
+
+        .cover-logo {
+            font-size: 56px;
+            font-weight: 900;
+            margin-bottom: 15px;
+            letter-spacing: -2px;
+        }
+
+        .cover-tagline {
+            font-size: 24px;
+            margin-bottom: 50px;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .cover-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 15px 40px;
+            border-radius: 50px;
+            margin: 10px;
+            font-size: 18px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* 컨텐츠 영역 */
+        .content {
+            padding: 60px 50px;
+        }
+
+        .section {
+            margin-bottom: 70px;
+            page-break-inside: avoid;
+        }
+
+        .section-number {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 50px;
+            font-size: 24px;
+            font-weight: 700;
+            margin-right: 15px;
+            vertical-align: middle;
+        }
+
+        .section-title {
+            display: inline-block;
+            font-size: 36px;
+            color: #1a202c;
+            margin-bottom: 25px;
+            font-weight: 800;
+            vertical-align: middle;
+            letter-spacing: -1.5px;
+        }
+
+        .section-subtitle {
+            font-size: 20px;
+            color: #667eea;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            border-left: 4px solid #667eea;
+            padding-left: 15px;
+        }
+
+        /* 문제 상황 박스 */
+        .problem-box {
+            background: #fff5f5;
+            border-left: 5px solid #fc8181;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 10px;
+        }
+
+        .problem-box h3 {
+            color: #c53030;
+            font-size: 22px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .problem-box h3:before {
+            content: "😰";
+            font-size: 28px;
+            margin-right: 10px;
+        }
+
+        /* 해결책 박스 */
+        .solution-box {
+            background: linear-gradient(135deg, #f0f4ff, #e8f0fe);
+            border-left: 5px solid #667eea;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 10px;
+        }
+
+        .solution-box h3 {
+            color: #667eea;
+            font-size: 22px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .solution-box h3:before {
+            content: "✨";
+            font-size: 28px;
+            margin-right: 10px;
+        }
+
+        /* 카드 그리드 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin: 25px 0;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 30px;
+            border-radius: 20px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .card:hover {
+            border-color: #667eea;
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.15);
+            transform: translateY(-8px);
+        }
+
+        .card-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .card h4 {
+            color: #667eea;
+            font-size: 20px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .card p {
+            color: #4a5568;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* 단계별 가이드 */
+        .step {
+            background: linear-gradient(to right, #f7fafc, white);
+            border-left: 5px solid #667eea;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .step-number {
+            position: absolute;
+            left: -30px;
+            top: 15px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.4);
+        }
+
+        .step h4 {
+            color: #1a202c;
+            font-size: 20px;
+            margin-bottom: 10px;
+            margin-left: 30px;
+            font-weight: 600;
+        }
+
+        .step p {
+            color: #4a5568;
+            margin-left: 30px;
+            font-size: 16px;
+        }
+
+        /* 비교 테이블 */
+        .comparison {
+            margin: 30px 0;
+        }
+
+        .comparison-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .comparison-col {
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .comparison-col.before {
+            background: #fff5f5;
+            border: 2px solid #fc8181;
+        }
+
+        .comparison-col.after {
+            background: linear-gradient(135deg, #f0f4ff, #e8f0fe);
+            border: 2px solid #667eea;
+        }
+
+        .comparison-col h4 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .comparison-col.before h4 {
+            color: #c53030;
+        }
+
+        .comparison-col.after h4 {
+            color: #667eea;
+        }
+
+        /* 가격 박스 */
+        .price-banner {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 60px 50px;
+            border-radius: 25px;
+            text-align: center;
+            margin: 40px 0;
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+
+        .price-banner h3 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            font-weight: 700;
+        }
+
+        .price {
+            font-size: 56px;
+            font-weight: 900;
+            margin: 20px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .price-detail {
+            font-size: 18px;
+            opacity: 0.95;
+            margin-top: 15px;
+            position: relative;
+            z-index: 1;
+            line-height: 2;
+        }
+
+        /* 리스트 스타일 */
+        .check-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .check-list li {
+            padding: 12px 0;
+            padding-left: 35px;
+            position: relative;
+            font-size: 16px;
+            color: #2d3748;
+        }
+
+        .check-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #48bb78;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        /* 강조 텍스트 */
+        .highlight {
+            background: linear-gradient(transparent 60%, #ffd700 60%);
+            font-weight: 600;
+            padding: 0 5px;
+        }
+
+        .text-large {
+            font-size: 20px;
+            line-height: 1.8;
+            color: #2d3748;
+            margin: 20px 0;
+        }
+
+        /* 연락처 박스 */
+        .contact-box {
+            background: #2d3748;
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin: 40px 0;
+        }
+
+        .contact-box h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .contact-item {
+            margin: 15px 0;
+            font-size: 18px;
+        }
+
+        .contact-item strong {
+            display: inline-block;
+            width: 120px;
+            color: #a0aec0;
+        }
+
+        /* 인쇄 버튼 */
+        .print-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .print-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+                margin: 0;
+            }
+            .print-button {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            .comparison-header {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-button" onclick="window.print()">📄 PDF로 저장하기</button>
+
+    <div class="container">
+        <!-- 표지 -->
+        <div class="cover">
+            <div class="cover-logo">DocuNova</div>
+            <div class="cover-tagline">우리 회사 문서, 이제 AI가 다 찾아줍니다</div>
+            <div style="margin: 40px 0;">
+                <div class="cover-badge">💼 기업 전용</div>
+                <div class="cover-badge">🔒 100% 보안</div>
+                <div class="cover-badge">⚡ 초간단 설치</div>
+            </div>
+            <p style="font-size: 18px; margin-top: 50px; opacity: 0.9;">
+                엔터프라이즈급 AI 문서 분석 | 설치 10분 | 바로 사용 가능
+            </p>
+        </div>
+
+        <!-- 메인 컨텐츠 -->
+        <div class="content">
+            <!-- 섹션 1: 이런 고민 있으신가요? -->
+            <div class="section">
+                <span class="section-number">1</span>
+                <h2 class="section-title">이런 고민, 있으신가요?</h2>
+
+                <div class="problem-box">
+                    <h3>업무 중 이런 일, 자주 겪으시죠?</h3>
+                    <ul class="check-list" style="list-style: none;">
+                        <li style="padding-left: 35px; position: relative; margin: 15px 0;">
+                            <span style="position: absolute; left: 0; color: #c53030; font-size: 22px;">✗</span>
+                            <strong>"지난번 계약서 어디 있더라?"</strong><br>
+                            <span style="color: #666;">→ 파일 찾느라 30분 허비</span>
+                        </li>
+                        <li style="padding-left: 35px; position: relative; margin: 15px 0;">
+                            <span style="position: absolute; left: 0; color: #c53030; font-size: 22px;">✗</span>
+                            <strong>"이 보고서 요약 좀 해줘"</strong><br>
+                            <span style="color: #666;">→ 50페이지 문서 읽느라 1시간</span>
+                        </li>
+                        <li style="padding-left: 35px; position: relative; margin: 15px 0;">
+                            <span style="position: absolute; left: 0; color: #c53030; font-size: 22px;">✗</span>
+                            <strong>"작년 자료에 이 내용 있었는데..."</strong><br>
+                            <span style="color: #666;">→ 기억은 나는데 찾을 수가 없음</span>
+                        </li>
+                        <li style="padding-left: 35px; position: relative; margin: 15px 0;">
+                            <span style="position: absolute; left: 0; color: #c53030; font-size: 22px;">✗</span>
+                            <strong>"ChatGPT에 올리고 싶은데... 보안이..."</strong><br>
+                            <span style="color: #666;">→ 회사 자료는 외부에 올릴 수 없음</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <p class="text-large">
+                    매일 반복되는 <span class="highlight">문서 찾기</span>와 <span class="highlight">내용 파악</span>에<br>
+                    하루에 몇 시간씩 쓰고 계신가요?
+                </p>
+            </div>
+
+            <!-- 섹션 2: DocuNova가 해결해드립니다 -->
+            <div class="section">
+                <span class="section-number">2</span>
+                <h2 class="section-title">DocuNova가 해결해드립니다</h2>
+
+                <div class="solution-box">
+                    <h3>이제 이렇게 바뀝니다</h3>
+                    <p class="text-large" style="margin: 20px 0;">
+                        우리 회사의 <strong>모든 문서를 AI가 학습</strong>해서,<br>
+                        질문만 하면 <strong>바로 찾아서 답변</strong>해드립니다.
+                    </p>
+                </div>
+
+                <div class="comparison">
+                    <div class="comparison-header">
+                        <div class="comparison-col before">
+                            <h4>😓 지금</h4>
+                            <p style="margin: 15px 0; color: #666; font-size: 15px;">
+                                파일 찾기 → 열기 → 읽기 → 정리<br>
+                                <strong style="color: #c53030; font-size: 20px;">최소 30분~1시간</strong>
+                            </p>
+                        </div>
+                        <div class="comparison-col after">
+                            <h4>😊 DocuNova 사용 후</h4>
+                            <p style="margin: 15px 0; color: #666; font-size: 15px;">
+                                질문 입력 → AI가 찾아서 답변<br>
+                                <strong style="color: #667eea; font-size: 20px;">단 10초!</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="section-subtitle">실제 사용 예시</h3>
+
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-icon">💼</div>
+                        <h4>법무팀 김 과장님</h4>
+                        <p>"작년 A사와 맺은 계약서의 계약 금액이 얼마였지?"<br><br>
+                        <strong style="color: #667eea;">→ 10초만에 정확한 금액과 계약서 위치 확인</strong></p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">📊</div>
+                        <h4>기획팀 이 대리님</h4>
+                        <p>"지난 3개월 매출 보고서 요약해줘"<br><br>
+                        <strong style="color: #667eea;">→ 핵심 내용만 쏙쏙 정리된 요약 즉시 확인</strong></p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🔍</div>
+                        <h4>연구팀 박 팀장님</h4>
+                        <p>"우리 제품과 유사한 특허가 있나?"<br><br>
+                        <strong style="color: #667eea;">→ 수백 개 특허 문서 중 관련 있는 것만 자동 추출</strong></p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">👨‍💼</div>
+                        <h4>신입사원 최 사원님</h4>
+                        <p>"회사 복지 제도 알려줘"<br><br>
+                        <strong style="color: #667eea;">→ 사내 규정집에서 관련 내용 자동 검색</strong></p>
+                    </div>
+                </div>
+
+                <h3 class="section-subtitle">📸 실제 화면으로 확인해보세요</h3>
+
+                <div style="margin: 30px 0;">
+                    <div style="margin-bottom: 30px; text-align: center;">
+                        <img src="도큐노바화면1.png" alt="DocuNova 메인 화면" style="width: 100%; max-width: 900px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); margin-bottom: 15px;">
+                        <p style="color: #666; font-size: 14px; margin-top: 10px;">▲ 메인 화면: 100% 보안, 빠른 검색, 스마트 분석을 한눈에</p>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+                        <div style="text-align: center;">
+                            <img src="도큐노바화면2.png" alt="AI 대화 시작" style="width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); margin-bottom: 10px;">
+                            <p style="color: #666; font-size: 13px;">▲ AI 어시스턴트: 원하는 기능을 클릭만 하면 시작</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <img src="도큐노바화면3.png" alt="대화형 질의응답" style="width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); margin-bottom: 10px;">
+                            <p style="color: #666; font-size: 13px;">▲ 대화형 질의응답: 카카오톡처럼 편하게 질문</p>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div style="text-align: center;">
+                            <img src="도큐노바화면4.png" alt="문서 관리" style="width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); margin-bottom: 10px;">
+                            <p style="color: #666; font-size: 13px;">▲ 문서 관리: 드래그만 하면 자동 업로드</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <img src="도큐노바화면5.png" alt="문서 기반 답변" style="width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); margin-bottom: 10px;">
+                            <p style="color: #666; font-size: 13px;">▲ 문서 기반 답변: 출처와 함께 정확한 답변 제공</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 섹션 3: 왜 DocuNova인가요? -->
+            <div class="section">
+                <span class="section-number">3</span>
+                <h2 class="section-title">왜 DocuNova인가요?</h2>
+
+                <h3 class="section-subtitle">🔒 1. 완벽한 보안 - 우리 회사 자료는 절대 외부로 안 나갑니다</h3>
+                <div class="card" style="margin: 20px 0;">
+                    <p class="text-large">
+                        <strong style="color: #c53030;">ChatGPT나 다른 AI 서비스는?</strong><br>
+                        → 회사 문서를 인터넷으로 보내야 해서 불안하죠.<br><br>
+
+                        <strong style="color: #48bb78;">DocuNova는?</strong><br>
+                        → <span class="highlight">우리 회사 컴퓨터 안에서만</span> 모든 작업이 이루어집니다.<br>
+                        → AI 모델도 우리 컴퓨터에 설치되어서 인터넷 없이도 작동!<br>
+                        → <strong>절대 외부로 데이터가 나가지 않습니다.</strong>
+                    </p>
+                </div>
+
+                <h3 class="section-subtitle">⚡ 2. 정말 빠릅니다 - 몇만 개 문서도 10초 안에</h3>
+                <div class="card" style="margin: 20px 0;">
+                    <p class="text-large">
+                        수동으로 찾기: 📁📁📁 30분~1시간<br>
+                        DocuNova로 찾기: ⚡ 10초<br><br>
+
+                        <strong>어떻게 가능한가요?</strong><br>
+                        → AI가 모든 문서의 '의미'를 이해하고 기억해둡니다.<br>
+                        → 키워드가 정확히 일치하지 않아도 관련된 내용을 찾아냅니다.
+                    </p>
+                </div>
+
+                <h3 class="section-subtitle">🎯 3. 정확한 답변 - "이 내용은 어느 파일에 있었지?" 걱정 끝</h3>
+                <div class="card" style="margin: 20px 0;">
+                    <p class="text-large">
+                        <strong>답변과 함께 출처도 알려드립니다</strong><br>
+                        → "이 정보는 계약서_2024.pdf 15페이지에 있습니다"<br>
+                        → 클릭 한 번으로 원본 파일 바로 확인<br>
+                        → 잘못된 정보 걱정 없이 신뢰할 수 있습니다
+                    </p>
+                </div>
+
+                <h3 class="section-subtitle">😊 4. 정말 쉽습니다 - PC 사용할 줄 아시면 됩니다</h3>
+                <div class="step" style="margin-left: 30px;">
+                    <div class="step-number">1</div>
+                    <h4>설치 파일 실행</h4>
+                    <p>→ 자동으로 설치가 진행됩니다</p>
+                </div>
+                <div class="step" style="margin-left: 30px;">
+                    <div class="step-number">2</div>
+                    <h4>프로그램 시작</h4>
+                    <p>→ 브라우저에서 바로 사용 가능</p>
+                </div>
+                <div class="step" style="margin-left: 30px;">
+                    <div class="step-number">3</div>
+                    <h4>문서 업로드 및 분석</h4>
+                    <p>→ 드래그 앤 드롭으로 간편하게</p>
+                </div>
+
+                <div class="solution-box" style="margin-top: 30px;">
+                    <p class="text-large">
+                        <strong>복잡한 설정이나 IT 지식 필요 없습니다!</strong><br>
+                        설치 → 시작 → 문서 분석<br>
+                        3단계면 끝입니다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 섹션 4: 이런 분들께 추천합니다 -->
+            <div class="section">
+                <span class="section-number">4</span>
+                <h2 class="section-title">이런 분들께 딱입니다</h2>
+
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-icon">👔</div>
+                        <h4>법무/계약 담당자</h4>
+                        <ul class="check-list">
+                            <li>수백 개 계약서 관리하시는 분</li>
+                            <li>과거 계약 내용 자주 찾으시는 분</li>
+                            <li>유사 계약 사례가 필요하신 분</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">📈</div>
+                        <h4>경영/기획팀</h4>
+                        <ul class="check-list">
+                            <li>보고서 읽고 요약하는 시간을 줄이고 싶은 분</li>
+                            <li>과거 데이터를 자주 참고하시는 분</li>
+                            <li>문서 정리에 시간을 많이 쓰시는 분</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🔬</div>
+                        <h4>연구/개발팀</h4>
+                        <ul class="check-list">
+                            <li>논문이나 기술 문서가 많으신 분</li>
+                            <li>특허 검색이 필요하신 분</li>
+                            <li>연구 자료를 체계적으로 관리하고 싶은 분</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🏢</div>
+                        <h4>중소기업 대표님</h4>
+                        <ul class="check-list">
+                            <li>회사 문서를 체계적으로 관리하고 싶은 분</li>
+                            <li>직원들의 업무 효율을 높이고 싶은 분</li>
+                            <li>보안이 중요한 회사 자료를 다루시는 분</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 섹션 5: 가격 및 구매 -->
+            <div class="section">
+                <span class="section-number">5</span>
+                <h2 class="section-title">지금 바로 시작하세요</h2>
+
+                <div class="price-banner">
+                    <h3>DocuNova Enterprise</h3>
+                    <p style="font-size: 20px; margin: 20px 0;">기업 맞춤형 AI 문서 분석 솔루션</p>
+                    <p class="price-detail">
+                        ✓ 완벽한 온-프레미스 보안<br>
+                        ✓ 무제한 문서 처리<br>
+                        ✓ 전문가 기술 지원<br>
+                        ✓ 맞춤형 커스터마이징 가능
+                    </p>
+                </div>
+
+                <div class="solution-box">
+                    <h3>도입 문의</h3>
+                    <p class="text-large">
+                        귀사의 요구사항에 맞춘<br>
+                        최적의 솔루션을 제안해드립니다.<br><br>
+
+                        <strong>가격 및 도입 문의</strong><br>
+                        이메일: leejinkyu0612@naver.com<br>
+                        전화: 010-9973-2113<br>
+                        (평일 09:00-18:00)
+                    </p>
+                </div>
+            </div>
+
+            <!-- 섹션 6: 자주 묻는 질문 -->
+            <div class="section">
+                <span class="section-number">6</span>
+                <h2 class="section-title">자주 묻는 질문</h2>
+
+                <div class="card" style="margin: 20px 0;">
+                    <h4 style="color: #1a202c; margin-bottom: 10px;">Q. 정말 IT 지식이 없어도 되나요?</h4>
+                    <p><strong>A.</strong> 네! 파일 더블클릭할 줄 아시면 됩니다. 브라우저로 네이버 검색하듯이 사용하시면 됩니다.</p>
+                </div>
+
+                <div class="card" style="margin: 20px 0;">
+                    <h4 style="color: #1a202c; margin-bottom: 10px;">Q. 우리 회사 컴퓨터가 오래됐는데 괜찮을까요?</h4>
+                    <p><strong>A.</strong> Windows 10 이상, RAM 8GB 이상이면 사용 가능합니다. 대부분의 일반 업무용 PC는 문제없습니다.</p>
+                </div>
+
+                <div class="card" style="margin: 20px 0;">
+                    <h4 style="color: #1a202c; margin-bottom: 10px;">Q. 정말 보안이 안전한가요?</h4>
+                    <p><strong>A.</strong> 네! 모든 데이터가 귀사의 서버 내에서만 처리됩니다. 인터넷으로 전송되는 것이 전혀 없으며, 금융권이나 관공서에서도 안심하고 사용 가능합니다.</p>
+                </div>
+
+                <div class="card" style="margin: 20px 0;">
+                    <h4 style="color: #1a202c; margin-bottom: 10px;">Q. 설치 및 운영 지원은 어떻게 받나요?</h4>
+                    <p><strong>A.</strong> 전문 기술팀이 설치부터 운영까지 전 과정을 지원합니다. 이메일이나 전화로 연락주시면 신속하게 대응해드립니다.</p>
+                </div>
+            </div>
+
+            <!-- 연락처 -->
+            <div class="section">
+                <div class="contact-box">
+                    <h3>📞 문의하기</h3>
+                    <div class="contact-item">
+                        <strong>이메일</strong> leejinkyu0612@naver.com
+                    </div>
+                    <div class="contact-item">
+                        <strong>전화</strong> 010-9973-2113 (평일 09:00-18:00)
+                    </div>
+                    <div class="contact-item">
+                        <strong>담당자</strong> 이진규
+                    </div>
+                    <p style="margin-top: 30px; font-size: 16px; opacity: 0.9;">
+                        궁금한 점이 있으시면 언제든 편하게 연락주세요.<br>
+                        친절하게 안내해드리겠습니다!
+                    </p>
+                </div>
+            </div>
+
+            <!-- 마지막 CTA -->
+            <div style="text-align: center; padding: 60px 0;">
+                <p style="font-size: 32px; color: #1a202c; margin-bottom: 30px; font-weight: 700;">
+                    우리 회사에 딱 맞는 AI 솔루션
+                </p>
+                <p style="font-size: 20px; color: #667eea; margin-bottom: 40px;">
+                    문서 찾는 시간을 10배 줄이고,<br>
+                    업무 효율은 10배 높이세요.
+                </p>
+                <div style="background: linear-gradient(135deg, #f0f4ff, #e8f0fe); padding: 40px; border-radius: 20px;">
+                    <p style="font-size: 18px; color: #2d3748; line-height: 2;">
+                        <strong style="font-size: 22px;">도입 절차</strong><br><br>
+                        1. 무료 상담 및 데모 시연<br>
+                        2. 귀사 환경에 맞춘 커스터마이징<br>
+                        3. 설치 및 교육 지원 (1-2일)<br>
+                        4. 안정적인 운영 및 기술 지원<br><br>
+                        <span style="color: #667eea; font-size: 20px;">📞 지금 문의하세요: 010-9973-2113</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 푸터 -->
+        <div style="background: #2d3748; color: white; padding: 40px; text-align: center;">
+            <p style="font-size: 18px; margin-bottom: 10px;">DocuNova Enterprise v1.0</p>
+            <p style="font-size: 14px; opacity: 0.7;">© 2025 DocuNova. All rights reserved.</p>
+        </div>
+    </div>
+
+    <script>
+        // 스크롤 애니메이션
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card, .step, .section');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
